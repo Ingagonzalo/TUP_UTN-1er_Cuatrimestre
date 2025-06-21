@@ -1,0 +1,63 @@
+#cloud-config
+autoinstall:
+  # version is an Autoinstall required field.
+  version: 1
+
+  apt:
+    fallback: offline-install
+
+  locale: en_US
+  keyboard:
+    layout: us
+
+  shutdown: reboot
+
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 0
+
+
+
+
+
+  # Custom Commands.
+  late-commands:
+    - cp /cdrom/vboxpostinstall.sh /target/root/vboxpostinstall.sh
+    - chmod +x /target/root/vboxpostinstall.sh
+    - curtin in-target --target=/target -- /bin/bash /root/vboxpostinstall.sh --direct
+
+  # Additional cloud-init configuration affecting the target system can be supplied
+  # underneath a user-data section inside of autoinstall.
+  user-data:
+    hostname: 'UTNTPIntegrador'
+    users:
+      - name: root
+        primary_group: root
+        groups: sudo
+        lock-passwd: false
+        passwd: '$6$0mgEePt1LW4FrfdB$6B1.8v25bMB.1IyRUK6PyskmuV.Z7yvBEMd22QuQ6TdIQNgaFP/KCqk0wgiTexy.zPgnvgOe4TTp7LPPROs.I.'
+        uid: 0
+
+      - name: 'ingag'
+        gecos: 'ingag'
+        primary_group: 'ingag'
+
+
+        groups: sudo
+
+        lock-passwd: false
+        shell: /bin/bash
+        passwd: '$6$jKfxOwDJ9NiJ4BU/$kK80cFeba73VxwpQYTIxVxlUW4M2bN2IaNi0pIFnaWhv9eGRSxSju3Mo3491.EYawPJ46h9Yu0xJCG/UfjfmD0'
+
+
+    timezone: Etc/UTC
+
+
+
+    ntp:
+
+
+        enabled: true
+
